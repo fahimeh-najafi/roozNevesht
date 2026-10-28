@@ -27,9 +27,11 @@ Click any Farsi field to open the on-screen Persian keyboard; no Windows keyboar
 .\scripts\startup.ps1
 ```
 
-This installs a shortcut in your user's Startup folder. It starts the background server at Windows sign-in, and restarts the server if it crashes. No administrator permission is needed. The computer must be on, awake, and signed in. This is not an internet deployment or a Windows service running before sign-in.
+This installs a shortcut in your user's Startup folder and a per-user scheduled watchdog. It starts the background server at Windows sign-in and restarts the server if it exits. The watchdog checks every minute and relaunches the background launcher if it stops; it also runs on battery power and after waking from sleep. Duplicate launchers are ignored only after checking that the saved process ID actually belongs to this project's launcher, so Windows reusing an old ID cannot block startup.
 
-Start the background launcher now through the Windows Run dialog with `shell:startup`, then open the Daybook shortcut. The shortcut launches Node directly, so the background app does not depend on PowerShell script permissions. A minimized Node window runs the supervisor. Closing it stops automatic crash recovery for that session.
+No administrator permission is requested. If Windows policy blocks task registration, the installer warns and retains the sign-in shortcut, but recovery of a stopped launcher is unavailable. The computer must be on, awake, and signed in; the server remains available when the screen is locked. It cannot respond while the laptop is asleep or powered off. Starting before sign-in requires a separately configured Windows service. This is not an internet deployment.
+
+The installer starts the scheduled watchdog immediately when registration succeeds. Otherwise, start the background launcher through the Windows Run dialog with `shell:startup`, then open the Daybook shortcut. The shortcut launches Node directly, so the background app does not depend on PowerShell script permissions. A minimized Node window runs the supervisor. If it is closed, the watchdog relaunches it within about a minute when installed.
 
 To disable automatic startup and stop the background server:
 

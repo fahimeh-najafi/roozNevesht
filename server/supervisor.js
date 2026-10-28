@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, openSync, readFileSync, writeFileSync, unlinkSync, closeSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
@@ -24,12 +24,22 @@ function readPid() {
     if (!Number.isInteger(pid) || pid <= 0) throw new Error('Invalid PID');
     try {
       process.kill(pid, 0);
-      return pid;
     } catch (error) {
-      if (error.code !== 'ESRCH') return pid;
+      if (error.code !== 'ESRCH') throw error;
+      unlinkSync(pidFile);
+      return null;
     }
+    const command = process.platform === 'win32'
+      ? execFileSync(resolve(process.env.SystemRoot, 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe'), [
+        '-NoProfile', '-NonInteractive', '-Command',
+        `(Get-CimInstance Win32_Process -Filter 'ProcessId = ${pid}').CommandLine`,
+      ], { encoding: 'utf8', windowsHide: true, timeout: 15000 })
+      : execFileSync('ps', ['-p', String(pid), '-o', 'args='], { encoding: 'utf8', timeout: 15000 });
+    const launcher = fileURLToPath(import.meta.url).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (new RegExp(`(?:^|\\s)"?${launcher}"?\\s*$`, process.platform === 'win32' ? 'i' : '').test(command)) return pid;
   } catch (error) {
     if (error.code === 'ENOENT') return null;
+    if (error.code && error.message !== 'Invalid PID') throw error;
   }
   unlinkSync(pidFile);
   return null;
@@ -39,8 +49,8 @@ function launch() {
   if (stopping) return;
   child = spawn(process.execPath, [resolve(root, 'server', 'index.js')], { cwd: root, stdio: ['ignore', log, log], windowsHide: true });
   child.on('error', (error) => console.error(error));
-  child.on('exit', (code) => {
-    if (stopping || code === 0) process.exit(0);
+  child.on('exit', () => {
+    if (stopping) process.exit(0);
     else setTimeout(launch, 5000);
   });
 }
