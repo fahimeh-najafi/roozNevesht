@@ -7,10 +7,13 @@ $ShortcutPath = Join-Path $StartupDirectory 'Daybook.lnk'
 $Shell = New-Object -ComObject WScript.Shell
 $TaskName = 'Daybook-roozNevesht'
 $LauncherPath = Join-Path $ProjectRoot 'server\supervisor.js'
+$HiddenLauncher = Join-Path $PSScriptRoot 'background.vbs'
+$ScriptHost = Join-Path $env:SystemRoot 'System32\wscript.exe'
 
 if ($Remove) {
     $Task = Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue
-    if ($Task -and $Task.Actions.Arguments -contains ('"' + $LauncherPath + '"')) {
+    if ($Task -and ($Task.Actions.Arguments -contains ('"' + $LauncherPath + '"') -or
+        $Task.Actions.Arguments -like ('"' + $HiddenLauncher + '" * "' + $LauncherPath + '"'))) {
         Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
     }
     $Shortcut = $Shell.CreateShortcut($ShortcutPath)
@@ -37,9 +40,10 @@ if (-not (Test-Path (Join-Path $ProjectRoot 'dist\index.html'))) {
     throw 'Build Daybook first with npm.cmd run build.'
 }
 $Node = (Get-Command node.exe -ErrorAction Stop).Source
+$LauncherArguments = '"' + $HiddenLauncher + '" "' + $Node + '" "' + $LauncherPath + '"'
 $Shortcut = $Shell.CreateShortcut($ShortcutPath)
-$Shortcut.TargetPath = $Node
-$Shortcut.Arguments = '"' + (Join-Path $ProjectRoot 'server\supervisor.js') + '"'
+$Shortcut.TargetPath = $ScriptHost
+$Shortcut.Arguments = $LauncherArguments
 $Shortcut.WorkingDirectory = $ProjectRoot
 $Shortcut.WindowStyle = 7
 $Shortcut.Description = 'Private Daybook calendar and SQLite server'
@@ -47,11 +51,12 @@ $Shortcut.Save()
 Write-Output "Automatic startup installed: $ShortcutPath"
 try {
     $ExistingTask = Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue
-    if ($ExistingTask -and $ExistingTask.Actions.Arguments -notcontains ('"' + $LauncherPath + '"')) {
+    if ($ExistingTask -and $ExistingTask.Actions.Arguments -notcontains ('"' + $LauncherPath + '"') -and
+        $ExistingTask.Actions.Arguments -notcontains $LauncherArguments) {
         throw "Task $TaskName belongs to another installation."
     }
     $User = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-    $Action = New-ScheduledTaskAction -Execute $Node -Argument ('"' + $LauncherPath + '"') -WorkingDirectory $ProjectRoot
+    $Action = New-ScheduledTaskAction -Execute $ScriptHost -Argument $LauncherArguments -WorkingDirectory $ProjectRoot
     $Logon = New-ScheduledTaskTrigger -AtLogOn -User $User
     $Watchdog = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes 1)
     $Principal = New-ScheduledTaskPrincipal -UserId $User -LogonType Interactive -RunLevel Limited

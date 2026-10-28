@@ -31,7 +31,7 @@ This installs a shortcut in your user's Startup folder and a per-user scheduled 
 
 No administrator permission is requested. If Windows policy blocks task registration, the installer warns and retains the sign-in shortcut, but recovery of a stopped launcher is unavailable. The computer must be on, awake, and signed in; the server remains available when the screen is locked. It cannot respond while the laptop is asleep or powered off. Starting before sign-in requires a separately configured Windows service. This is not an internet deployment.
 
-The installer starts the scheduled watchdog immediately when registration succeeds. Otherwise, start the background launcher through the Windows Run dialog with `shell:startup`, then open the Daybook shortcut. The shortcut launches Node directly, so the background app does not depend on PowerShell script permissions. A minimized Node window runs the supervisor. If it is closed, the watchdog relaunches it within about a minute when installed.
+The installer starts the scheduled watchdog immediately when registration succeeds. Otherwise, start the background launcher through the Windows Run dialog with `shell:startup`, then open the Daybook shortcut. Both launch through Windows Script Host with the console hidden, so no PowerShell or Node window should appear. The background app does not depend on PowerShell script permissions. If the launcher stops, the watchdog relaunches it within about a minute when installed. Run the installer again to update an older installation that opens console windows.
 
 To disable automatic startup and stop the background server:
 
