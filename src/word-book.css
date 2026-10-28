@@ -1,0 +1,53 @@
+.word-book{--persian-font:'Vazirmatn',Tahoma,sans-serif}
+.word-book [lang="fa"]{font-family:var(--persian-font)}
+.word-book .topbar{justify-content:space-between}
+.back-link{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--green)}
+.word-book-main{display:block;max-width:1100px;min-height:calc(100vh - 100px);padding:44px 28px 64px}
+.word-book-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.word-book-heading h1{font-size:36px}
+#word-total{font-size:13px;color:#727c73;white-space:nowrap}
+.word-book-status{display:flex;align-items:center;gap:8px;min-height:52px;margin-bottom:12px}
+#word-status{font-size:13px;margin:0;color:#727c73}
+#word-status.save-error{color:#a03939}
+.word-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px}
+.word-table th{width:33.333%;padding:14px 12px;text-align:left;font-weight:600;background:#edf1eb;border-bottom:1px solid #d5ddd3}
+.word-table th[dir="rtl"]{text-align:right;font-size:16px}
+.word-table th span{margin-inline-start:6px;color:#647766}
+.word-table td{padding:14px 12px;vertical-align:top;border-bottom:1px solid var(--line)}
+.word-table input{display:block;width:100%;min-width:0;padding:10px 8px;border:1px solid transparent;border-radius:4px;background:transparent;color:inherit;text-overflow:ellipsis}
+.word-table input:hover{border-color:#d5ddd3}
+.word-table input:focus{outline:2px solid var(--green);outline-offset:1px;background:white}
+.word-table input[lang="fa"]{font-family:var(--persian-font);font-size:17px;line-height:1.7}
+.word-entry{background:#f1f5ef}
+.word-entry input{border-color:#d5ddd3;background:#fff}
+.word-row-actions{display:flex;gap:4px;margin-top:8px;height:34px}
+.word-table input[readonly]{cursor:default;border-color:transparent}
+.word-table input[readonly]:focus{outline:none;background:transparent}
+.word-table .word-action-cell{position:relative;padding-right:44px}
+.word-more{position:absolute;right:4px;top:18px;width:30px;height:30px}
+.word-menu{position:fixed;inset:auto;margin:0;padding:4px;width:150px;border:1px solid #d5ddd3;border-radius:6px;background:#fff;color:#303c36;box-shadow:0 4px 16px #263b2826}
+.word-menu:not(:popover-open){display:none}
+.word-menu:popover-open{display:flex;flex-direction:column}
+.word-menu button{display:flex;align-items:center;gap:10px;min-height:38px;padding:8px 10px;text-align:left;border-radius:3px;font-size:13px}
+.word-menu button:hover{background:#edf1eb}
+.word-menu button:last-child{color:#a03939}
+.word-editing{background:#f1f5ef}
+.word-editing input{background:#fff;border-color:#d5ddd3}
+@media(max-width:600px){.word-table .word-action-cell{padding-right:36px}.word-more{right:2px;top:14px}}
+.word-add{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:6px 10px;margin-top:8px;border-radius:4px;background:var(--green);color:white;font-size:12px}
+.word-add:hover{background:#295a46}
+.words-empty{padding:24px 12px;text-align:center;color:#727c73;font-size:14px}
+.word-book [hidden]{display:none!important}
+.persian-keyboard-open{scroll-padding-bottom:var(--persian-keyboard-height,360px)}
+.persian-keyboard-open .word-book{padding-bottom:var(--persian-keyboard-height,360px)}
+.persian-keyboard{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;width:min(680px,calc(100% - 24px));padding:12px;border:1px solid #cdd7cb;border-radius:8px;background:#f4f7f2;box-shadow:0 6px 32px #263b2826}
+.persian-keyboard-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.persian-keyboard-header h2{margin:0;font:500 14px 'DM Sans',sans-serif}
+.persian-keyboard-row{display:flex;justify-content:center;gap:5px;margin-top:5px;direction:ltr}
+.persian-key{display:flex;align-items:center;justify-content:center;flex:1;min-width:0;height:38px;max-width:62px;padding:0;border:1px solid #d5ddd3;border-radius:4px;background:white;font:18px var(--persian-font);touch-action:manipulation;user-select:none}
+.persian-key:hover{background:#e2ecdf;border-color:#94af9a}
+.persian-key:active{background:#cddfca}
+.persian-keyboard-tools .persian-key{max-width:none;flex:2;font-size:12px}
+.persian-keyboard-tools .persian-space{flex:6}
+@media(max-width:600px){.persian-keyboard{bottom:env(safe-area-inset-bottom,0px);width:100%;padding:8px;border-radius:8px 8px 0 0}.persian-keyboard-row{gap:3px}.persian-key{height:36px;font-size:17px}}
+@media(max-width:600px){.word-book .topbar{height:76px;padding:0 16px}.word-book-main{padding:28px 10px 40px;min-height:calc(100vh - 76px)}.word-book-heading,.word-book-status{margin-left:6px;margin-right:6px}.word-book-heading h1{font-size:28px}.word-table th,.word-table td{padding:10px 5px}.word-table input{padding:9px 5px;font-size:13px}.word-table th{font-size:13px}.word-table th span{display:block;margin:4px 0 0}.word-add{padding:6px;font-size:11px;gap:4px}}

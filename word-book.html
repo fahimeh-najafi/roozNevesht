@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fafbf9" />
+    <title>Word Book | daybook</title>
+  </head>
+  <body class="word-book">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="daybook home"><span class="brand-mark"><i data-lucide="asterisk"></i></span>daybook<span class="brand-period">.</span></a>
+      <a class="back-link" href="/"><i data-lucide="arrow-left"></i>Daybook</a>
+    </header>
+    <main class="word-book-main">
+      <div class="word-book-heading"><h1>Word Book</h1><span id="word-total">0 words</span></div>
+      <div class="word-book-status"><p id="word-status" role="status" aria-live="polite">Connecting...</p><button id="retry-words" class="icon-button" title="Retry loading words" aria-label="Retry loading words" hidden><i data-lucide="refresh-cw"></i></button></div>
+      <form id="add-word"></form>
+      <table class="word-table">
+        <caption class="sr-only">Personal dictionary: Norsk, English and Farsi</caption>
+        <thead><tr><th scope="col" lang="nb">Norsk</th><th scope="col">English</th><th scope="col" lang="fa" dir="rtl">&#x641;&#x627;&#x631;&#x633;&#x6cc;</th></tr></thead>
+        <tbody class="word-entry"><tr>
+          <td><label class="sr-only" for="new-norsk">New Norsk word</label><input id="new-norsk" name="norsk" lang="nb" form="add-word" placeholder="Norsk" maxlength="500" autocomplete="off" disabled /><button id="add-word-button" form="add-word" class="word-add" type="submit" disabled><i data-lucide="plus"></i>Add word</button></td>
+          <td><label class="sr-only" for="new-english">New English translation</label><input id="new-english" name="english" lang="en" form="add-word" placeholder="English" maxlength="500" autocomplete="off" disabled /></td>
+          <td><label class="sr-only" for="new-farsi">New Farsi translation</label><input id="new-farsi" name="farsi" lang="fa" dir="rtl" inputmode="none" form="add-word" placeholder="&#x641;&#x627;&#x631;&#x633;&#x6cc;" maxlength="500" autocomplete="off" disabled /></td>
+        </tr></tbody>
+        <tbody id="word-rows"></tbody>
+      </table>
+      <p id="words-empty" class="words-empty" hidden>No words yet.</p>
+    </main>
+    <dialog id="delete-word-dialog" class="confirm-dialog"><h2>Delete this word?</h2><p id="delete-word-name"></p><div class="confirm-actions"><button id="keep-word" class="today-button">Keep word</button><button id="confirm-delete-word" class="delete-button">Delete word</button></div></dialog>
+    <script type="module" src="/src/word-book.js"></script>
+  </body>
+</html>

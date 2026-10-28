@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fafbf9" />
+    <meta name="description" content="A quiet place for your days. A personal calendar and daily notebook, saved on your device." />
+    <title>daybook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="daybook home"><span class="brand-mark"><i data-lucide="asterisk"></i></span>daybook<span class="brand-period">.</span></a>
+        <div class="topbar-actions"><a href="/word-book.html" title="Word Book" aria-label="Word Book" class="word-book-link"><i data-lucide="book-open"></i><span>word book</span></a><button id="export" class="icon-button" title="Export all notes" aria-label="Export all notes"><i data-lucide="download"></i></button></div>
+      </header>
+      <main>
+        <section class="calendar-section" aria-label="Monthly calendar">
+          <div class="calendar-toolbar">
+            <div class="month-heading"><h1 id="month-heading"></h1><span id="year-label"></span></div>
+            <div class="calendar-actions"><button id="search-open" class="icon-button" title="Search notes" aria-label="Search notes"><i data-lucide="search"></i></button><span class="toolbar-divider"></span><button id="today" class="today-button">Today</button><div class="month-arrows"><button id="previous" class="icon-button" title="Previous month" aria-label="Previous month"><i data-lucide="chevron-left"></i></button><button id="next" class="icon-button" title="Next month" aria-label="Next month"><i data-lucide="chevron-right"></i></button></div></div>
+          </div>
+          <div class="calendar-frame"><div class="weekdays" aria-hidden="true"><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span></div><div id="calendar" class="calendar-grid" aria-labelledby="month-heading"></div></div>
+        </section>
+        <aside class="note-panel" aria-label="Daily note editor">
+          <div class="note-panel-top"><span class="note-label"><i data-lucide="book-open"></i> THE DAILY PAGE</span><div class="note-tools"><button id="delete-note" class="icon-button" title="Delete this note" aria-label="Delete this note"><i data-lucide="trash-2"></i></button><button id="close-note" class="icon-button mobile-close" title="Back to calendar" aria-label="Back to calendar"><i data-lucide="x"></i></button></div></div>
+          <div class="note-date"><span id="note-weekday"></span><h2 id="note-date"></h2><span id="relative-date" class="date-chip"></span></div>
+          <div class="note-rule"></div>
+          <label class="sr-only" for="note-title">Note title</label><input id="note-title" class="note-title" placeholder="Give today a title..." maxlength="120" autocomplete="off" />
+          <label class="sr-only" for="note-body">Daily note</label><textarea id="note-body" placeholder="What would you like to remember?" spellcheck="true"></textarea>
+          <div class="note-footer"><span id="save-status" role="status"><i data-lucide="check"></i> All changes saved</span><span id="word-count">0 words</span></div>
+          <div class="daily-image"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=85" alt="Sunlight falling through a quiet green forest" /></div>
+        </aside>
+      </main>
+    </div>
+    <dialog id="search-dialog"><div class="search-header"><i data-lucide="search"></i><label class="sr-only" for="search-input">Search your notes</label><input id="search-input" placeholder="Find a day, a thought, a memory..." autocomplete="off" /><button id="search-close" class="icon-button" aria-label="Close search" title="Close search"><i data-lucide="x"></i></button></div><div id="search-results" class="search-results"></div></dialog>
+    <dialog id="delete-dialog" class="confirm-dialog"><h2>Let this page go?</h2><p>This day's note will be permanently deleted.</p><div class="confirm-actions"><button id="delete-cancel" class="today-button">Keep note</button><button id="delete-confirm" class="delete-button">Delete note</button></div></dialog>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
