@@ -3,6 +3,8 @@ import '@fontsource/vazirmatn/400.css';
 import '@fontsource/vazirmatn/600.css';
 import './style.css';
 import './word-book.css';
+import { sortWords } from './word-sort.js';
+import { filterWords } from './word-search.js';
 
 const icons = { Asterisk, ArrowLeft, Plus, Save, Trash2, RefreshCw, Delete, X, Space, Ellipsis, Pencil };
 const element = (id) => document.getElementById(id);
@@ -11,6 +13,37 @@ let words = [];
 let deletion = null;
 let keyboardInput = null;
 let pointerNavigation = false;
+let sortField = null;
+let sortDirection = 'ascending';
+
+function applySort() {
+  if (!sortField) return;
+  const body = element('word-rows');
+  const rows = new Map([...body.children].map((row) => [row.dataset.id, row]));
+  for (const word of sortWords(words, sortField, sortDirection)) {
+    body.append(rows.get(String(word.id)));
+  }
+}
+
+for (const button of document.querySelectorAll('[data-sort-field]')) {
+  button.addEventListener('click', () => {
+    const field = button.dataset.sortField;
+    sortDirection = sortField === field && sortDirection === 'ascending' ? 'descending' : 'ascending';
+    sortField = field;
+    for (const control of document.querySelectorAll('[data-sort-field]')) {
+      const active = control === button;
+      if (active) control.parentElement.setAttribute('aria-sort', sortDirection);
+      else control.parentElement.removeAttribute('aria-sort');
+      control.querySelector('.word-sort-indicator').textContent = active
+        ? sortDirection === 'ascending' ? '\u2191' : '\u2193'
+        : '\u2195';
+      const next = active && sortDirection === 'ascending' ? 'descending' : 'ascending';
+      control.setAttribute('aria-label', `Sort ${control.dataset.sortLabel} alphabetically ${next}`);
+      control.title = control.getAttribute('aria-label');
+    }
+    applySort();
+  });
+}
 
 const keyboard = document.createElement('section');
 keyboard.id = 'persian-keyboard';
@@ -140,10 +173,23 @@ async function request(path = '', method = 'GET', body) {
   return data;
 }
 
-function updateCount() {
-  element('word-total').textContent = `${words.length} ${words.length === 1 ? 'word' : 'words'}`;
-  element('words-empty').hidden = words.length !== 0;
+function updateWordView() {
+  const query = element('word-search').value;
+  const matches = new Set(filterWords(words, query).map((word) => String(word.id)));
+  for (const row of element('word-rows').children) row.hidden = !matches.has(row.dataset.id);
+  const total = `${words.length} ${words.length === 1 ? 'word' : 'words'}`;
+  element('word-total').textContent = query.trim() ? `${matches.size} of ${total}` : total;
+  element('words-empty').hidden = matches.size !== 0;
+  element('words-empty').textContent = words.length ? 'No matching words.' : 'No words yet.';
+  element('clear-word-search').hidden = query.length === 0;
 }
+
+element('word-search').addEventListener('input', updateWordView);
+element('clear-word-search').addEventListener('click', () => {
+  element('word-search').value = '';
+  updateWordView();
+  element('word-search').focus();
+});
 
 function setBusy(row, busy) {
   for (const control of row.querySelectorAll('input, button')) control.disabled = busy;
@@ -225,8 +271,11 @@ function renderWord(word) {
       words = words.map((entry) => entry.id === word.id ? data.word : entry);
       const replacement = renderWord(data.word);
       row.replaceWith(replacement);
+      applySort();
+      updateWordView();
       createIcons({ icons });
-      replacement.querySelector('.word-more').focus();
+      if (replacement.hidden) element('word-search').focus();
+      else replacement.querySelector('.word-more').focus();
       status('Saved to database');
     } catch {
       status('Could not save. Your changes are still here; try saving again.', true);
@@ -274,8 +323,10 @@ async function load() {
   try {
     words = (await request()).words;
     element('word-rows').replaceChildren(...words.map(renderWord));
+    applySort();
     for (const control of document.querySelectorAll('[form="add-word"]')) control.disabled = false;
-    updateCount();
+    element('word-search').disabled = false;
+    updateWordView();
     status('Saved to database');
     createIcons({ icons });
   } catch {
@@ -295,8 +346,9 @@ element('add-word').addEventListener('submit', async (event) => {
     const { word } = await request('', 'POST', payload);
     words.unshift(word);
     element('word-rows').prepend(renderWord(word));
+    applySort();
     form.reset();
-    updateCount();
+    updateWordView();
     createIcons({ icons });
     status('Saved to database');
   } catch {
@@ -318,7 +370,7 @@ element('confirm-delete-word').addEventListener('click', async () => {
     await request(`/${word.id}`, 'DELETE');
     words = words.filter((entry) => entry.id !== word.id);
     row.remove();
-    updateCount();
+    updateWordView();
     status('Word deleted');
   } catch {
     status('Could not delete word. Try again.', true);

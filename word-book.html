@@ -12,12 +12,21 @@
       <a class="back-link" href="/"><i data-lucide="arrow-left"></i>Daybook</a>
     </header>
     <main class="word-book-main">
-      <div class="word-book-heading"><h1>Word Book</h1><span id="word-total">0 words</span></div>
+      <div class="word-book-heading"><h1>Word Book</h1><span id="word-total" aria-live="polite" aria-atomic="true">0 words</span></div>
       <div class="word-book-status"><p id="word-status" role="status" aria-live="polite">Connecting...</p><button id="retry-words" class="icon-button" title="Retry loading words" aria-label="Retry loading words" hidden><i data-lucide="refresh-cw"></i></button></div>
+      <div class="word-search" role="search" aria-label="Word Book">
+        <label class="sr-only" for="word-search">Search words in all languages</label>
+        <input id="word-search" type="search" placeholder="search a word" dir="auto" autocomplete="off" disabled />
+        <button id="clear-word-search" class="icon-button" type="button" title="Clear search" aria-label="Clear search" hidden><i data-lucide="x"></i></button>
+      </div>
       <form id="add-word"></form>
       <table class="word-table">
         <caption class="sr-only">Personal dictionary: Norsk, English and Farsi</caption>
-        <thead><tr><th scope="col" lang="nb">Norsk</th><th scope="col">English</th><th scope="col" lang="fa" dir="rtl">&#x641;&#x627;&#x631;&#x633;&#x6cc;</th></tr></thead>
+        <thead><tr>
+          <th scope="col" lang="nb"><button type="button" class="word-sort" data-sort-field="norsk" data-sort-label="Norsk" aria-label="Sort Norsk alphabetically ascending" title="Sort Norsk alphabetically ascending">Norsk<span class="word-sort-indicator" aria-hidden="true">&#x2195;</span></button></th>
+          <th scope="col"><button type="button" class="word-sort" data-sort-field="english" data-sort-label="English" aria-label="Sort English alphabetically ascending" title="Sort English alphabetically ascending">English<span class="word-sort-indicator" aria-hidden="true">&#x2195;</span></button></th>
+          <th scope="col" lang="fa" dir="rtl"><button type="button" class="word-sort" data-sort-field="farsi" data-sort-label="Farsi" aria-label="Sort Farsi alphabetically ascending" title="Sort Farsi alphabetically ascending">&#x641;&#x627;&#x631;&#x633;&#x6cc;<span class="word-sort-indicator" aria-hidden="true">&#x2195;</span></button></th>
+        </tr></thead>
         <tbody class="word-entry"><tr>
           <td><label class="sr-only" for="new-norsk">New Norsk word</label><input id="new-norsk" name="norsk" lang="nb" form="add-word" placeholder="Norsk" maxlength="500" autocomplete="off" disabled /><button id="add-word-button" form="add-word" class="word-add" type="submit" disabled><i data-lucide="plus"></i>Add word</button></td>
           <td><label class="sr-only" for="new-english">New English translation</label><input id="new-english" name="english" lang="en" form="add-word" placeholder="English" maxlength="500" autocomplete="off" disabled /></td>
@@ -25,7 +34,7 @@
         </tr></tbody>
         <tbody id="word-rows"></tbody>
       </table>
-      <p id="words-empty" class="words-empty" hidden>No words yet.</p>
+      <p id="words-empty" class="words-empty" role="status" hidden>No words yet.</p>
     </main>
     <dialog id="delete-word-dialog" class="confirm-dialog"><h2>Delete this word?</h2><p id="delete-word-name"></p><div class="confirm-actions"><button id="keep-word" class="today-button">Keep word</button><button id="confirm-delete-word" class="delete-button">Delete word</button></div></dialog>
     <script type="module" src="/src/word-book.js"></script>

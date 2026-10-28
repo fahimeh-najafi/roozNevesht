@@ -21,6 +21,10 @@ Add Norsk, English, and Farsi translations in the first table row; all fields ar
 
 Click any Farsi field to open the on-screen Persian keyboard; no Windows keyboard layout is needed. It inserts at the cursor and supports selected-text replacement, space, half-space, and backspace. Close it with the X button, Escape, or by clicking outside it. Your physical keyboard still works normally.
 
+Click any column heading to sort saved words alphabetically in that language; click it again to reverse the order. The arrow shows the current direction. Sorting ignores letter case and keeps empty translations last in either direction. Translations stay together, and unsaved edits are preserved. Added or saved words follow the selected order until you reload the page.
+
+Use the search field above the table to instantly filter saved words by any part of their Norsk, English, or Farsi translations. Search ignores letter case and surrounding spaces, shows the matching count, and works with the selected sort order. Clear search to restore all rows without losing unsaved edits. Adding, saving, or deleting a word updates the results automatically; search does not include edits until they are saved.
+
 ## Automatic Windows startup
 
 ```powershell

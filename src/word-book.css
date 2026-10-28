@@ -9,10 +9,16 @@
 .word-book-status{display:flex;align-items:center;gap:8px;min-height:52px;margin-bottom:12px}
 #word-status{font-size:13px;margin:0;color:#727c73}
 #word-status.save-error{color:#a03939}
+.word-search{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.word-search input{width:100%;min-width:0;min-height:42px;padding:10px 12px;border:1px solid #d5ddd3;border-radius:4px;background:#fff;color:inherit;font-family:'DM Sans',var(--persian-font);font-size:14px}
+.word-search input:focus{outline:2px solid var(--green);outline-offset:1px}
 .word-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px}
 .word-table th{width:33.333%;padding:14px 12px;text-align:left;font-weight:600;background:#edf1eb;border-bottom:1px solid #d5ddd3}
 .word-table th[dir="rtl"]{text-align:right;font-size:16px}
 .word-table th span{margin-inline-start:6px;color:#647766}
+.word-sort{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0;text-align:inherit;font-weight:inherit}
+.word-sort:hover,.word-table th[aria-sort] .word-sort{color:var(--green)}
+.word-table .word-sort-indicator{display:inline-block;margin:0;font-size:16px}
 .word-table td{padding:14px 12px;vertical-align:top;border-bottom:1px solid var(--line)}
 .word-table input{display:block;width:100%;min-width:0;padding:10px 8px;border:1px solid transparent;border-radius:4px;background:transparent;color:inherit;text-overflow:ellipsis}
 .word-table input:hover{border-color:#d5ddd3}
